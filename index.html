@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        .draggableElement {
+            width: 100px;
+            height: 50px;
+            background-color: #f0f0f0;
+            border: 1px solid #999;
+            cursor: grab;
+            position: absolute;
+        }
+
+        .e{
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="draggableElement a">Drag me 1!</div>
+        <div class="draggableElement b">Drag me 2!</div>
+        <div class="draggableElement c">Drag me 3!</div>
+        <div class="draggableElement d">Drag me 4!</div>
+        <div class="draggableElement e">Drag me 5!</div>
+    </div>
+
+
+    <script>
+        const draggableElements = document.querySelectorAll('.draggableElement');
+        const container = document.getElementById('container');
+
+        let offsetX, offsetY;
+        let isDragging = false;
+        let currentElement = null;
+
+        draggableElements.forEach((element) => {
+            element.addEventListener('mousedown', (event) => {
+                currentElement = element;
+                isDragging = true;
+                offsetX = event.clientX - element.getBoundingClientRect().left;
+                offsetY = event.clientY - element.getBoundingClientRect().top;
+            });
+        });
+
+        document.addEventListener('mousemove', (event) => {
+            if (isDragging && currentElement !== null) {
+                const x = event.clientX - offsetX - container.getBoundingClientRect().left;
+                const y = event.clientY - offsetY - container.getBoundingClientRect().top;
+
+                currentElement.style.left = `${Math.max(0, Math.min(x, container.clientWidth - currentElement.clientWidth))}px`;
+                currentElement.style.top = `${Math.max(0, Math.min(y, container.clientHeight - currentElement.clientHeight))}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+            currentElement = null;
+        });
+
+    </script>
+</body>
+
+</html>
